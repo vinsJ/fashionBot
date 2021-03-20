@@ -1,0 +1,20 @@
+{
+  "name": "moviebot",
+  "version": "1.0.0",
+  "description": "Movie bot - Facebook messenger chatbot",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Vincent DEBANDE - DIA2",
+  "license": "ISC",
+  "dependencies": {
+    "axios": "^0.21.1",
+    "body-parser": "^1.19.0",
+    "dotenv": "^8.2.0",
+    "express": "^4.17.1",
+    "nodemon": "^2.0.7",
+    "request": "^2.88.2",
+    "xregexp": "^4.4.1"
+  }
+}
