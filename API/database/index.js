@@ -42,12 +42,13 @@ async function close(client){
 async function agg(db, query, limit){
     try {
         const collection = db.collection('products');
-        console.log(query);
+        console.log("This is the query: ", query);
         const res = await collection.aggregate([
             { $match : query},
             { $sample: { size: limit}},
             { $sort: {price:  1}}
         ]).toArray();
+        console.log("This is the res: ", res);
         return res;
     } catch(e) {
         console.log("🚨", e);
@@ -97,7 +98,6 @@ async function run(querry, sort = null, type, limit = null){
             res = await query(db, querry, sort, limit);
             return res
         } else {
-            console.log("here");
             res = await agg(db, querry, limit = 3);
         }
         return res;
@@ -124,8 +124,8 @@ async function sandbox(){
         console.log("Connection ... 🦄")
         db = await connect();
         const collection = db.collection('products');
-        res = await collection.find({'onSale' : true}).toArray();
-        //res = await collection.deleteMany({});
+        //res = await collection.find({'onSale' : true}).toArray();
+        res = await collection.deleteMany({});
         return res;
 
      } catch(e) {

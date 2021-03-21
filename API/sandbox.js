@@ -117,7 +117,7 @@ const [,, eshop] = process.argv;
 
 //* Uploading data test
 
-//uploadData();
+uploadData();
 
 //* Database link test
 
@@ -128,9 +128,9 @@ const [,, eshop] = process.argv;
 //   console.log(res);
 // })
 
-db.sandbox().then(res => {
-  console.log(res.length);
-})
+// db.sandbox().then(res => {
+//   console.log(res.length);
+// })
 
 // db2.getProducts({limit:  3, price : 0, color : 'Blue', material : null}, null, '', 3).then(res =>{
 //   console.log(res);

@@ -9,6 +9,7 @@ const config = require("./config/index.js");
 const FBeamer = require("./fbeamer");
 
 const fashion = require('./fashion');
+const responseHandle = require("./response");
 
 const f = new FBeamer(config.FB);
 
@@ -26,9 +27,21 @@ server.post(
 server.post("/", (req, res, next) => {
   return f.incoming(req, res, async (data) => {
     try {
-      fashion(data.nlp).then(res =>{
-        let response = "";
-        f.txt(data.sender, response);
+      console.log("🚨 New incoming message: ", data);
+      console.log("💽 NLP intents: ", data.nlp.intents);
+      console.log("💽 NLP entities: ", data.nlp.entities);
+      fashion(data.nlp).then(res => {
+        console.log("🚨🚨 : ", res);
+        let response = responseHandle.processResponse(res.products);
+        if (response.message) f.txt(data.sender, response.message);
+        if (response.images.length > 0) {
+          console.log(response.images.length)
+          response.images.forEach(img => {
+            console.log(img)
+            f.img(data.sender, img); 
+          });
+        }
+
       });
     } catch (e) {
       console.log(e);

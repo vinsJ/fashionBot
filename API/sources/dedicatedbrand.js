@@ -55,6 +55,7 @@ module.exports.getAPI = async (url) => {
         rawProduct.name, 
         rawProduct.price.priceAsNumber, 
         rawProduct.image,
+        categories[cleanUri].split("::"),
         brandName,
         "https://www.dedicatedbrand.com/en/" + rawProduct.canonicalUri,
         rawProduct.swatch.desc,

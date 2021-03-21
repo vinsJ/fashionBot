@@ -4,7 +4,7 @@ const helmet = require('helmet');
 
 const db = require('./database/api-db');
 
-const PORT = 8092;
+const PORT = 3300;
 
 const app = express();
 
@@ -67,8 +67,9 @@ app.get('/products/search', async function (request, response) {
   }
 
   result = await db.getProducts({limit, price, color, material})
+  console.log(result);
   if (result) {
-    if (result.products.length >= 1) {
+    if (result.length >= 1) {
       response.send({ 'status': 200, 'result': result });
     } else {
       response.send({ 'status': 204, 'message': 'No item found for given parameters', 'parameters' : {price, brand, limit, page} });

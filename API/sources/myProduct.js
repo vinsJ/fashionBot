@@ -4,10 +4,11 @@ const {'v5': uuidv5} = require('uuid');
 var datetime = new Date();
 
 module.exports = class Product {
-    constructor(nameP, price, images, brandName, link, color, material, sale, newProduct){
+    constructor(nameP, price, images, categories, brandName, link, color, material, sale, newProduct){
         this.nameP = nameP, // string
         this.price = price, // float 
         this.images = images // [string]
+        this.categories = categories;
         this.brandName = brandName, // string
         this.link = link,
         this.uuid = uuidv5(link, uuidv5.URL),
