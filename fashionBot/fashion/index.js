@@ -74,7 +74,6 @@ module.exports = (nlpData) => {
       if (Object.keys(nlpData.entities).length == 0) {
         // We get 3 randoms products
         products = await getProducts(null);
-        console.log("👕🚨 ", products);
         resolve({ 'products': products });
       }
     }

@@ -94,10 +94,11 @@ class FBeamer{
             }, (error, response, body) => {
                 if(!error && response.statusCode === 200){
                     resolve({
-                        mid: body.message_id
+                        mid: body.message_id,
+                        aid: body.attachment_id
                     });
                 } else {
-                    reject(error);
+                    reject(body.error);
                 }
             });
         });
@@ -112,7 +113,7 @@ class FBeamer{
         return this.sendMessage(obj)
     }
 
-    img(id, image, messaging_type = 'RESPONSE'){
+    img (id, image, messaging_type = 'RESPONSE') {
         let obj={
             messaging_type,
             recipient:{id},
@@ -126,7 +127,34 @@ class FBeamer{
                 }
             }
         }
-        return this.sendMessage(obj)
+        return this.sendMessage(obj);
+    }
+
+
+
+    template (id, name, link, image, price, emoji, type, material, sale){
+        let obj={
+            recipient:{id},
+            "message":{
+                "attachment": {
+                    "type": "template",
+                    "payload": {
+                        "template_type": "generic",
+                        "elements": [{
+                            "title": name,
+                            "image_url": image,
+                            "subtitle": `${emoji} | ${type} | ${price}€ ${material} ${sale}`,
+                            "default_action": {
+                                "type": "web_url",
+                                "url": link
+                            }
+                        }]
+                    }
+                }
+            }
+        }
+        return this.sendMessage(obj);
+
     }
 }
 

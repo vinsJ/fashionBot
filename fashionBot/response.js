@@ -2,6 +2,7 @@ const processResponse = function(products){
     if(products){
         let message = "";
         let images = [];
+        let prods = [];
         let counter = 1;
         products.forEach(p => {
             let emoji = "";
@@ -15,9 +16,10 @@ const processResponse = function(products){
 
             message += `${emoji}This is product ${counter}: \nName: ${p.name} | Price: ${p.price} | Material: ${p.material} | ${onSale} | Check it out : ${p.link}\n\n\n`;
             images.push(p.image);
+            prods.push({'name': p.name, 'link': p.link, 'image': p.image, "price": p.price, "material": p.material, "type": p.type, "onSale" : p.onSale, "emoji": emoji});
             counter+=1;
         });
-        return {message, images};
+        return {message, prods};
     }
 }
 
@@ -25,6 +27,7 @@ const getEmoji = function(genre, type){
     let emoji = "";
     if(genre == 'Men') emoji = "🧑";
     else if (genre == 'Women') emoji = "👩";
+    else if (genre == 'Kids') emoji = "👦👧"
 
     return emoji;
 }

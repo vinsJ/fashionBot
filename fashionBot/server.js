@@ -31,15 +31,19 @@ server.post("/", (req, res, next) => {
       console.log("💽 NLP intents: ", data.nlp.intents);
       console.log("💽 NLP entities: ", data.nlp.entities);
       fashion(data.nlp).then(res => {
-        console.log("🚨🚨 : ", res);
         let response = responseHandle.processResponse(res.products);
-        if (response.message) f.txt(data.sender, response.message);
-        if (response.images.length > 0) {
-          console.log(response.images.length)
-          response.images.forEach(img => {
-            console.log(img)
-            f.img(data.sender, img); 
-          });
+        //if (response.message) f.txt(data.sender, response.message);
+        if (response.prods.length > 0) {
+          response.prods.forEach(p => {
+            let sale = "";
+            if(p.material == "undefined") p.material = "";
+            else p.material = "| " + p.material;
+            if(p.onSale == true) sale = "| 💸";
+            f.template(data.sender, p.name, p.link, p.image, p.price, p.emoji, p.type, p.material, sale).catch((err) => {
+              console.log(err);
+            });
+          })
+
         }
 
       });
