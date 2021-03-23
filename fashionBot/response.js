@@ -25,9 +25,9 @@ const processResponse = function(products){
 
 const getEmoji = function(genre, type){
     let emoji = "";
-    if(genre == 'Men') emoji = "🧑";
-    else if (genre == 'Women') emoji = "👩";
-    else if (genre == 'Kids') emoji = "👦👧"
+    if(genre == 'men') emoji = "🧑";
+    else if (genre == 'women') emoji = "👩";
+    else if (genre == 'kids') emoji = "👦👧"
 
     return emoji;
 }

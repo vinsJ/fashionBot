@@ -51,15 +51,24 @@ module.exports.getAPI = async (url) => {
       //   images: rawProduct.image,
       // };
 
+      let caterogies = categories[cleanUri].split("::").map(cat => {
+        return cat.toLowerCase();
+      });
+
+      let material = "";
+      if(rawProduct.material_info){
+        material = rawProduct.material_info;
+      }
+
       let product = new Product(
         rawProduct.name, 
         rawProduct.price.priceAsNumber, 
         rawProduct.image,
-        categories[cleanUri].split("::"),
+        caterogies,
         brandName,
         "https://www.dedicatedbrand.com/en/" + rawProduct.canonicalUri,
         rawProduct.swatch.desc,
-        rawProduct.material_info,
+        material,
         rawProduct.price.showAsOnSale,
         rawProduct.price.newProduct
         )

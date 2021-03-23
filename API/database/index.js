@@ -8,7 +8,7 @@ const cluster_url = process.env.CLUSTER_URL;
 
 const {MongoClient} = require('mongodb');
 const MONGODB_URI = 'mongodb+srv://' + user + ':' + password + '@' + cluster_url + '?retryWrites=true&w=majority'
-const MONGODB_DB_NAME = 'fashion-bot';
+const MONGODB_DB_NAME = 'fashionBot';
 
 let client = new MongoClient(MONGODB_URI,  {'useUnifiedTopology': true});
 let db = null;
@@ -103,9 +103,9 @@ async function run(querry, sort = null, type, limit = null){
         return res;
     } catch(e) {
         console.log("🚨", e);
-    } 
+    }  
 
-} 
+}
 
 async function insertData(data){
     try{
@@ -125,7 +125,7 @@ async function sandbox(){
         db = await connect();
         const collection = db.collection('products');
         //res = await collection.find({'onSale' : true}).toArray();
-        res = await collection.deleteMany({});
+        //res = await collection.deleteMany({});
         return res;
 
      } catch(e) {
