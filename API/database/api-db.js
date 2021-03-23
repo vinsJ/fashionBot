@@ -43,13 +43,19 @@ const getProducts = async function(filter) {
                 query = {color : filter.color};
             }
         }
-
     }
 
     console.log("Looking for products matching: " + JSON.stringify(query) + " ... 🕵️‍♀️");
-    let res = await db.getQuery(query, true, '', filter.limit, filter.page);
+    let res = await db.getQuery(query, true, '', filter.limit);
     return res;
 }
 
+const getProductsFilter = async function(filter) {
+    console.log("Looking for products matching: " + JSON.stringify(filter) + " ... 🕵️‍♀️");
+    let res = await db.getQuery(filter, true, '', 3);
+    return res;
+}
+
+module.exports.getProductsFilter = getProductsFilter;
 module.exports.getProductID = getProductID;
 module.exports.getProducts = getProducts;
