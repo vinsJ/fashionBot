@@ -48,7 +48,7 @@ async function agg(db, query, limit){
             { $sample: { size: limit}},
             { $sort: {price:  1}}
         ]).toArray();
-        console.log("This is the res: ", res);
+        //console.log("This is the res: ", res);
         return res;
     } catch(e) {
         console.log("🚨", e);

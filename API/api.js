@@ -46,8 +46,14 @@ app.get('/products/search', async function (request, response) {
   let price = 0;
   let color = null;
   let material = null;
+  let onSale = null;
 
-  
+  let filter = {};
+
+  if(request.body.filter){
+    filter = request.body.filter;
+    console.log("filter: ", filter);
+  }
 
   // retrieving parameters
   if(request.query.limit){
@@ -66,13 +72,25 @@ app.get('/products/search', async function (request, response) {
     material = request.query.material;
   }
 
-  result = await db.getProducts({limit, price, color, material})
-  console.log(result);
+  if(request.query.onSale){
+    onSale = request.query.onSale;
+  }
+  let result = [];
+
+  if(Object.keys(filter).length == 0){
+    console.log("here");
+    result = await db.getProducts({limit, price, color, material, onSale})
+  }
+
+  else{
+    result = await db.getProductsFilter(filter)
+  }
+
   if (result) {
     if (result.length >= 1) {
       response.send({ 'status': 200, 'result': result });
     } else {
-      response.send({ 'status': 204, 'message': 'No item found for given parameters', 'parameters' : {price, brand, limit, page} });
+      response.send({ 'status': 204, 'message': 'No item found for given parameters', 'parameters' : {price, limit}});
     }
   } else {
     response.send({ 'status': 500, 'message': 'Could not access database' });
