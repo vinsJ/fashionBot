@@ -23,6 +23,7 @@ const getProducts = () => {
   return new Promise(async (resolve, reject) => {
     url = apiURL;
     axios.get(url).then(res => {
+
       products = res.data.result.map(p => {
         return {
           'name': p.nameP,
@@ -43,12 +44,12 @@ const getProducts = () => {
   });
 }
 
-const getProductsFiler = (filter) => {
+const getProductsFilter = (filter) => {
   return new Promise(async (resolve, reject) => {
     url = apiURL;
     axios.get(url, {data : {filter: filter}}).then(res => {
       if(res.data.status != 200){
-        resolve([])
+        resolve({'status': res.data.status, 'products': []})
       }
       products = res.data.result.map(p => {
         return {
@@ -63,9 +64,9 @@ const getProductsFiler = (filter) => {
           'type': p.categories[1]
         }
       });
-      resolve(products); 
+      resolve({'status': 200, 'products': products}); 
     }).catch(err => {
-      reject(err);
+      resolve({'status': 500});
     })
   })
 }
@@ -82,8 +83,8 @@ module.exports = (nlpData) => {
       // If no entities 
       if (Object.keys(nlpData.entities).length == 0) {
         // We get 3 randoms products
-        products = await getProducts(null);
-        resolve({ 'products': products });
+        res = await getProductsFilter({});
+        resolve({'type': 'FetchProducts', 'products': res.products, 'status': res.status });
       }
 
       else {
@@ -128,7 +129,7 @@ module.exports = (nlpData) => {
         }
         
         if(entities.hasOwnProperty('material:material')){
-          filter['material'] = extractEntity(nlpData, 'material');
+          filter['material'] = extractEntity(nlpData, 'material').toLowerCase();
         }
 
         if(entities.hasOwnProperty('genre:genre')){
@@ -136,8 +137,9 @@ module.exports = (nlpData) => {
           filter['categories'] = { "$all" : [genre]};
         }
 
-        products = await getProductsFiler(filter);
-        resolve({ 'products': products });
+        res = await getProductsFilter(filter);
+        console.log(res);
+        resolve({'type': 'FetchProducts', 'products': res.products, 'status': res.status });
 
       }
     }

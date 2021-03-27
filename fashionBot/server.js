@@ -27,22 +27,42 @@ server.post(
 server.post("/", (req, res, next) => {
   return f.incoming(req, res, async (data) => {
     try {
-      console.log("🚨 New incoming message: ", data);
-      console.log("💽 NLP intents: ", data.nlp.intents);
-      console.log("💽 NLP entities: ", data.nlp.entities);
+      // console.log("🚨 New incoming message: ", data);
+      // console.log("💽 NLP intents: ", data.nlp.intents);
+      // console.log("💽 NLP entities: ", data.nlp.entities);
+
+      if (data.nlp.hasOwnProperty('traits')) {
+        if (data.nlp.traits.hasOwnProperty('wit$greetings')) {
+          if (data.nlp.traits['wit$greetings'][0].value == 'true' && data.nlp.traits['wit$greetings'][0].confidence >= 0.80) {
+            listHello = ['Hi there 👋', 'Hello ! ✋👕', 'Howdy! 🤠', "G'day 🖖"];
+            var greeting = listHello[Math.floor(Math.random() * listHello.length)];
+            f.txt(data.sender, greeting);
+          }
+        }
+      }
       fashion(data.nlp).then(res => {
-        let response = responseHandle.processResponse(res.products);
-        //if (response.message) f.txt(data.sender, response.message);
-        if (response.prods.length > 0) {
-          response.prods.forEach(p => {
-            let sale = "";
-            if(p.material == "undefined") p.material = "";
-            else p.material = "| " + p.material;
-            if(p.onSale == true) sale = "| 💸";
-            f.template(data.sender, p.name, p.link, p.image, p.price, p.emoji, p.type, p.material, sale).catch((err) => {
-              console.log(err);
-            });
-          })
+        if (res.type == "FetchProducts") {
+          if (res.status == 200 || res.status == 204) {
+            f.txt(data.sender, `This is ${res.products.length} randoms products 🕵️‍♀️`);
+            let response = responseHandle.processResponse(res.products);
+            if (response.prods.length > 0) {
+              response.prods.forEach(p => {
+                let sale = "";
+                if (p.material == "undefined") p.material = "";
+                else p.material = "| " + p.material;
+                if (p.onSale == true) sale = "| 💸";
+                f.template(data.sender, p.name, p.link, p.image, p.price, p.emoji, p.type, p.material, sale).catch((err) => {
+                  console.log(err);
+                });
+              });
+            } else {
+              f.txt(data.sender, "I'm sorry, the product you're looking for doesn't exists 😥");
+            }
+          } else {
+            f.txt(data.sender, "Oups, something went wrong with our Database 🤦‍♂️🔨\n\nPlease try again later");
+          }
+
+        } else if (res.type == "LikeProducts") {
 
         }
 
