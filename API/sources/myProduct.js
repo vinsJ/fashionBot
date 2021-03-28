@@ -5,15 +5,15 @@ var datetime = new Date();
 
 module.exports = class Product {
     constructor(nameP, price, images, categories, brandName, link, color, material, sale, newProduct){
-        this.nameP = nameP, // string
+        this.nameP = nameP.toLowerCase(), // string
         this.price = price, // float 
         this.images = images // [string]
         this.categories = categories;
         this.brandName = brandName, // string
         this.link = link,
         this.uuid = uuidv5(link, uuidv5.URL),
-        this.color = color,
-        this.material = material,
+        this.color = color.toLowerCase(),
+        this.material = material.toLowerCase(),
         this.onSale = sale,
         this.new = newProduct
     }

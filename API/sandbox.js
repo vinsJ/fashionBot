@@ -15,15 +15,6 @@ async function sandbox (brand = None) {
       url = 'https://www.dedicatedbrand.com/en/men/news'
       //products = await dedicatedbrand.scrape(url);
       products = await dedicatedbrand.getAPI('https://www.dedicatedbrand.com/en/loadfilter?category=men');
-    } else if(brand == 'Mud-Jeans') {
-      url = 'https://mudjeans.eu/collections/men'
-      products = await mudjeansbrands.scrape(url);
-    } else if(brand == 'Adresse-Paris'){
-      url = 'https://adresse.paris/630-toute-la-collection?id_category=630&n=110';
-      products = await adresseparisbrands.scrape(url);
-    } else if(brand == 'Loom') {
-      url = 'https://www.loom.fr/collections/tous-les-vetements';
-      products = await loom.scrape(url);
     } else {
       console.log("sorry, the brand you're looking for doesn't exists here");
       process.exit(0);

@@ -20,77 +20,23 @@ app.get('/', (request, response) => {
   response.send({ 'ack': true });
 });
 
-app.get('/products/:id', async function (request, response, next) {
-  id = request.params.id;
-  if (id == "search") {
-    next();
-  } else {
-    console.log("products/:id triggered... 🕵️‍♀️")
-    db.getProductID(id).then(result => {
-      if (result) {
-        if (result.length >= 1) {
-          response.send({ 'status': 200, 'product': result });
-        } else {
-          response.send({ 'status': 404, 'message': 'No item found' });
-        }
-      } else {
-        response.send({ 'status': 500, 'message': 'Could not access database' });
-      }
-    });
-  }
-});
-
 app.get('/products/search', async function (request, response) {
   //console.log("products/search triggered... 🕵️‍♀️")
-  let limit = 3;
-  let price = 0;
-  let color = null;
-  let material = null;
-  let onSale = null;
+
 
   let filter = {};
 
   if(request.body.filter){
     filter = request.body.filter;
-    console.log("filter: ", filter);
   }
 
-  // retrieving parameters
-  if(request.query.limit){
-    limit = parseInt(request.query.limit);
-  }
-
-  if(request.query.price){
-    price = parseFloat(request.query.price);
-  }
-
-  if(request.query.color){
-    color = request.query.page;
-  }
-
-  if(request.query.material){
-    material = request.query.material;
-  }
-
-  if(request.query.onSale){
-    onSale = request.query.onSale;
-  }
-  let result = [];
-
-  if(Object.keys(filter).length == 0){
-    console.log("here");
-    result = await db.getProducts({limit, price, color, material, onSale})
-  }
-
-  else{
     result = await db.getProductsFilter(filter)
-  }
 
   if (result) {
     if (result.length >= 1) {
       response.send({ 'status': 200, 'result': result });
     } else {
-      response.send({ 'status': 204, 'message': 'No item found for given parameters', 'parameters' : {price, limit}});
+      response.send({ 'status': 204, 'message': 'No item found for given parameters', 'parameters' : filter});
     }
   } else {
     response.send({ 'status': 500, 'message': 'Could not access database' });
