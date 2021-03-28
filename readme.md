@@ -18,7 +18,7 @@ You can ask products with a lot of filters :
 
 - "Give me products" will return 3 randoms products
 - "Give me **[color]** products"
-- "Give me products costing **<more|less>** than **[price]**€"
+- "Give me products costing **<more|less>** than **[price]** €"
 - "Give me prodcuts **(not) on** sale"
 - "Give me products in **organical cotton**"
 - "Give me products for **<men|women|kids>**"
