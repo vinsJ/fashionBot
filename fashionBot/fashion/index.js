@@ -19,26 +19,6 @@ const extractEntity = (nlp, entity) => {
   }
 };
 
-// const getProducts = async function(filter) {
-//   url = apiURL;
-//   axios.get(url).then(res => {
-//     products = res.data.result.map(p => {
-//       return {
-//         'name': p.nameP,
-//         'price': p.price,
-//         'image': p.images[0],
-//         'color': p.color,
-//         'material': p.material,
-//         'onSale': p.onSale,
-//         'link': p.link
-//       }
-//     });
-
-//     console.log("getProducts: ", products.length);
-//     return products;
-//   })
-// }
-
 const getProducts = () => {
   return new Promise(async (resolve, reject) => {
     url = apiURL;
@@ -65,6 +45,10 @@ const getProducts = () => {
   });
 }
 
+const products = async function(){
+  
+}
+
 
 
 module.exports = (nlpData) => {
@@ -79,4 +63,11 @@ module.exports = (nlpData) => {
     }
     //resolve({"intent": intent});
   });
-};
+
+}
+
+const saveLikedProducts = async function(products){
+  // Code here. 
+}
+
+module.exports.products = products;
