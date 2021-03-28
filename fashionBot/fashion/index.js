@@ -19,39 +19,15 @@ const extractEntity = (nlp, entity) => {
   }
 };
 
-const getProducts = () => {
-  return new Promise(async (resolve, reject) => {
-    url = apiURL;
-    axios.get(url).then(res => {
-
-      products = res.data.result.map(p => {
-        return {
-          'name': p.nameP,
-          'price': p.price,
-          'image': p.images[0],
-          'color': p.color,
-          'material': p.material,
-          'onSale': p.onSale,
-          'link': p.link,
-          'genre': p.categories[0],
-          'type': p.categories[1]
-        }
-      });
-      resolve(products);
-    }).catch((err) => {
-      reject(err.response.data);
-    })
-  });
-}
-
 const getProductsFilter = (filter) => {
   return new Promise(async (resolve, reject) => {
     url = apiURL;
     axios.get(url, {data : {filter: filter}}).then(res => {
+      console.log(res);
       if(res.data.status != 200){
         resolve({'status': res.data.status, 'products': []})
       }
-      products = res.data.result.map(p => {
+      let products = res.data.result.map(p => {
         return {
           'name': p.nameP,
           'price': p.price,
@@ -66,20 +42,19 @@ const getProductsFilter = (filter) => {
       });
       resolve({'status': 200, 'products': products}); 
     }).catch(err => {
+      console.log(err);
       resolve({'status': 500});
     })
   })
 }
 
-module.exports = (nlpData) => {
+const products = async function(nlpData) {
   return new Promise(async (resolve, reject) => {
     let intent = extractEntity(nlpData, "intent");
     let entities = nlpData.entities;
-
     let filter = {};
     
     if (intent == 'getProducts') {
-
       // If no entities 
       if (Object.keys(nlpData.entities).length == 0) {
         // We get 3 randoms products
@@ -138,10 +113,11 @@ module.exports = (nlpData) => {
         }
 
         res = await getProductsFilter(filter);
-        console.log(res);
         resolve({'type': 'FetchProducts', 'products': res.products, 'status': res.status });
-
       }
     }
   });
-};
+
+}
+
+module.exports.products = products;

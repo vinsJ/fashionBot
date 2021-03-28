@@ -9,7 +9,8 @@ const config = require("./config/index.js");
 const FBeamer = require("./fbeamer");
 
 const fashion = require('./fashion');
-const responseHandle = require("./response");
+const responseHandle = require("./helper_response");
+const gradeHelper = require("./helper_grade");
 
 const f = new FBeamer(config.FB);
 
@@ -27,9 +28,14 @@ server.post(
 server.post("/", (req, res, next) => {
   return f.incoming(req, res, async (data) => {
     try {
-      // console.log("🚨 New incoming message: ", data);
-      // console.log("💽 NLP intents: ", data.nlp.intents);
-      // console.log("💽 NLP entities: ", data.nlp.entities);
+      console.log("🚨 New incoming message: ", data);
+      console.log("💽 NLP intents: ", data.nlp.intents);
+      console.log("💽 NLP entities: ", data.nlp.entities);
+
+      if(data.content.includes('I like')){
+        productLikes = gradeHelper(data.content);
+        // Need to call API and store product 
+      }
 
       if (data.nlp.hasOwnProperty('traits')) {
         if (data.nlp.traits.hasOwnProperty('wit$greetings')) {
@@ -40,7 +46,7 @@ server.post("/", (req, res, next) => {
           }
         }
       }
-      fashion(data.nlp).then(res => {
+      fashion.products(data.nlp).then(res => {
         if (res.type == "FetchProducts") {
           if (res.status == 200 || res.status == 204) {
             f.txt(data.sender, `This is ${res.products.length} randoms products 🕵️‍♀️`);
