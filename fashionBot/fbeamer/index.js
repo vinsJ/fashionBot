@@ -98,7 +98,7 @@ class FBeamer {
                 json: payload
             }, (error, response, body) => {
                 if (!error && response.statusCode === 200) {
-                    this.sleep(100).then(res => {
+                    this.sleep(150).then(res => {
                         resolve({
                             mid: body.message_id,
                             aid: body.attachment_id
@@ -161,6 +161,46 @@ class FBeamer {
         }
         return this.sendMessage(obj);
 
+    }
+
+    quick_replies_start_conv(id, text, messaging_type = 'RESPONSE') {
+        let obj = {
+            messaging_type,
+            recipient: { id },
+            message: {
+                'text': text,
+                'quick_replies': [
+                    {
+                        "content_type": "text",
+                        "title": "Products",
+                        "payload": "THIS IS A TEST PRODUCTS",
+                        "image_url": "https://images.unsplash.com/photo-1562157873-818bc0726f68?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=564&q=80"
+                    },
+
+                    {
+                        "content_type": "text",
+                        "title": "Products for women",
+                        "payload": "THIS IS A TEST PRODUCTS",
+                        "image_url": "https://images.unsplash.com/photo-1581404917879-53e19259fdda?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=1349&q=80"
+                    },
+
+                    {
+                        "content_type": "text",
+                        "title": "Products for men",
+                        "payload": "THIS IS A TEST PRODUCTS",
+                        "image_url": "https://images.unsplash.com/photo-1490578474895-699cd4e2cf59?ixlib=rb-1.2.1&ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&auto=format&fit=crop&w=1351&q=80"
+                    },
+
+                    {
+                        "content_type": "text",
+                        "title": "Products for kids",
+                        "payload": "THIS IS A TEST PRODUCTS",
+                        "image_url": "https://images.unsplash.com/photo-1476234251651-f353703a034d?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=634&q=80"
+                    }
+                ]
+            }
+        }
+        return this.sendMessage(obj)
     }
 }
 
