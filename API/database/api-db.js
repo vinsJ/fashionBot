@@ -6,4 +6,17 @@ const getProductsFilter = async function(filter) {
     return res;
 }
 
+const getProducts = async function(nameP){
+    let product = await db.getQuery({'nameP': nameP}, false, 'find');
+    return product;
+}
+
+const saveProductRating = async function(data){
+    let result = await db.saveProductRating(data);
+    return result;
+}
+
 module.exports.getProductsFilter = getProductsFilter;
+module.exports.getProducts = getProducts;
+module.exports.saveProductRating = saveProductRating;
+
