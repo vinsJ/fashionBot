@@ -1,32 +1,49 @@
-const getGrade = function(content) {
-    const grade = " with ";
- 
-    let rating = content.substring(content.indexOf(grade) + grade.length);
+const getGrade = function (content) {
+    try {
+        const grade = " with ";
 
-    if (rating.includes(' ')) {
-        rating = rating.replace(' ', '');
+        let rating = content.substring(content.indexOf(grade) + grade.length);
+
+        if (rating.includes(' ')) {
+            rating = rating.replace(' ', '');
+        }
+
+        rating = parseFloat(rating);
+
+        if(rating < 0){
+            rating = 0;
+        } 
+
+        if(rating > 5){
+            rating = 5;
+        }
+
+        return rating
+    } catch {
+        return null
     }
-
-    rating = parseFloat(rating);
-
-    return rating
 }
 
 
-const getProduct = function(content){
-    const like = "I like ";
-    const grade = " with ";
+const getProduct = function (content) {
+    try {
+        const like = "i like ";
+        const grade = " with ";
 
-    let product = content.substring(content.indexOf(like) + like.length, content.indexOf(grade));
-    return product;
+        let product = content.substring(content.indexOf(like) + like.length, content.indexOf(grade));
+        return product;
+
+    } catch {
+        return null
+    }
 }
 
 
-const retrieveLikes = function(content){
+const retrieveLikes = function (content) {
     product = getProduct(content);
     rating = getGrade(content);
 
-    return {'product': product, 'rating': rating};
+    return { 'product': product, 'rating': rating };
 
 }
 

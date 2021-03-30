@@ -23,7 +23,6 @@ const getProductsFilter = (filter) => {
   return new Promise(async (resolve, reject) => {
     url = apiURL;
     axios.get(url, {data : {filter: filter}}).then(res => {
-      console.log(res);
       if(res.data.status != 200){
         resolve({'status': res.data.status, 'products': []})
       }

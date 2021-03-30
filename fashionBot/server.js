@@ -32,9 +32,13 @@ server.post("/", (req, res, next) => {
       console.log("💽 NLP intents: ", data.nlp.intents);
       console.log("💽 NLP entities: ", data.nlp.entities);
 
-      if(data.content.includes('I like')){
-        productLikes = gradeHelper(data.content);
+      if(data.content.toLowerCase().includes('i like')){
+        productLikes = gradeHelper.retrieveLikes(data.content.toLowerCase());
+        if(productLikes.product != null && productLikes.rating != null) {
+          console.log(productLikes)
+        }
         // Need to call API and store product 
+
       }
 
       if (data.nlp.hasOwnProperty('traits')) {
@@ -42,7 +46,9 @@ server.post("/", (req, res, next) => {
           if (data.nlp.traits['wit$greetings'][0].value == 'true' && data.nlp.traits['wit$greetings'][0].confidence >= 0.80) {
             listHello = ['Hi there 👋', 'Hello ! ✋👕', 'Howdy! 🤠', "G'day 🖖"];
             var greeting = listHello[Math.floor(Math.random() * listHello.length)];
-            f.txt(data.sender, greeting);
+            f.quick_replies_start_conv(data.sender, greeting).then(res => {
+              console.log(res);
+            })
           }
         }
       }
