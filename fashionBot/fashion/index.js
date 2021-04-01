@@ -1,7 +1,7 @@
 const config = require("../config");
 const axios = require("axios");
 
-const apiURL = "http://localhost:3300/products/search";
+const apiURL = "http://localhost:3300";
 
 const extractEntity = (nlp, entity) => {
   if (entity == "intent") {
@@ -21,8 +21,8 @@ const extractEntity = (nlp, entity) => {
 
 const getProductsFilter = (filter) => {
   return new Promise(async (resolve, reject) => {
-    url = apiURL;
-    axios.get(url, {data : {filter: filter}}).then(res => {
+    url = apiURL + "/products/search";
+    axios.get(url , {data : {filter: filter}}).then(res => {
       if(res.data.status != 200){
         resolve({'status': res.data.status, 'products': []})
       }
@@ -121,4 +121,17 @@ const products = async function(nlpData) {
 
 }
 
+const saveRatings = async function(dataUser){
+  return new Promise(async (resolve, reject) =>{
+    url = apiURL + "/user/products";
+    axios.put(url,{data : dataUser}).then(res => {
+      resolve({'status': res.data.status});
+    }).catch(err => {
+      console.log(err);
+      resolve({'status': 500});
+    })
+  })
+}
+
 module.exports.products = products;
+module.exports.saveRatings = saveRatings;

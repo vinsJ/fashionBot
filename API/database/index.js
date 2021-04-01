@@ -48,7 +48,7 @@ async function agg(db, query, limit){
             { $sample: { size: limit}},
             { $sort: {price:  1}}
         ]).toArray();
-        //console.log("This is the res: ", res);
+        console.log("This is the res: ", res);
         return res;
     } catch(e) {
         console.log("🚨", e);
@@ -133,6 +133,21 @@ async function sandbox(){
     }
 }
 
+async function saveProductRating(data){
+    try{
+        console.log("Connection ... 🦄")
+        db = await connect();
+        const collection = db.collection('users');
+        res = await collection.updateOne({'product' : data.product, 'sender' : data.sender}, {$set: data}, {'upsert': true});
+        return res;
+    } catch(e){
+        console.log("🚨", e);
+        return null;
+    }
+
+}
+
 module.exports.getQuery = run;
 module.exports.insertData = insertData;
 module.exports.sandbox = sandbox;
+module.exports.saveProductRating = saveProductRating;
