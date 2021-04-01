@@ -114,6 +114,8 @@ const products = async function(nlpData) {
         res = await getProductsFilter(filter);
         resolve({'type': 'FetchProducts', 'products': res.products, 'status': res.status });
       }
+    } else {
+      resolve({'type' : 'unknown'});
     }
   });
 

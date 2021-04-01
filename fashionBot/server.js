@@ -34,11 +34,25 @@ server.post("/", (req, res, next) => {
 
       if(data.content.toLowerCase().includes('i like')){
         productLikes = gradeHelper.retrieveLikes(data.content.toLowerCase());
-        if(productLikes.product != null && productLikes.rating != null) {
-          console.log(productLikes)
+        console.log(productLikes);
+        if(productLikes.product != null && productLikes.product != ' ' && productLikes.rating != null) {
+          productLikes['sender'] = data.sender;
+          fashion.saveRatings(productLikes).then(res => {
+            if(res.status == 200){
+              f.txt(data.sender, 'Yaay, we saved this information ! 🎉🎉');
+            } else if(res.status == 404){
+              f.txt(data.sender, "Mmhh 🤔 The product doesn't exists. You should check the spelling !");
+            } else if(res.status == 500){
+              f.txt(data.sender, "Oups, something went wrong with our Database 🤦‍♂️🔨\n\nPlease try again later");
+            }
+          })
+        } else {
+          f.txt(data.sender, "I'm sorry, I don't recognize the product or the grade. 🤷‍♂️\n\nPlease, be sure to type : \"I like <product> with <rating>\". The rating must be between 0 and 5.");
         }
-        // Need to call API and store product 
+      }
 
+      if(data.content.toLowerCase().includes('recommend me')){
+        // call to api
       }
 
       if (data.nlp.hasOwnProperty('traits')) {
@@ -46,12 +60,11 @@ server.post("/", (req, res, next) => {
           if (data.nlp.traits['wit$greetings'][0].value == 'true' && data.nlp.traits['wit$greetings'][0].confidence >= 0.80) {
             listHello = ['Hi there 👋', 'Hello ! ✋👕', 'Howdy! 🤠', "G'day 🖖"];
             var greeting = listHello[Math.floor(Math.random() * listHello.length)];
-            f.quick_replies_start_conv(data.sender, greeting).then(res => {
-              console.log(res);
-            })
+            f.quick_replies_start_conv(data.sender, greeting);
           }
         }
       }
+      
       fashion.products(data.nlp).then(res => {
         if (res.type == "FetchProducts") {
           if (res.status == 200 || res.status == 204) {
@@ -74,8 +87,8 @@ server.post("/", (req, res, next) => {
             f.txt(data.sender, "Oups, something went wrong with our Database 🤦‍♂️🔨\n\nPlease try again later");
           }
 
-        } else if (res.type == "LikeProducts") {
-
+        } else if(res.type == "unknown"){
+          f.txt(data.sender, "I'm sorry, I don't understand what you are saying 🥺");
         }
 
       });
