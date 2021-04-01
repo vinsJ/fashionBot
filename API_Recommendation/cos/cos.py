@@ -2,14 +2,8 @@ import pandas as pd
 import numpy as np
 import json 
 import math
-def cos(All_produdcts=None,favorite_products=None):
-    f = open('All_products.json',)
-    All_produdcts=json.load(f)
-    f.close()
-
-    f = open('favorite_products.json',)
-    favorite_products=pd.DataFrame(json.load(f))
-    f.close()
+def cos(All_produdcts,favorite_products,id):
+    favorite_products=pd.DataFrame(favorite_products)
     #hot encoding
     categories=[product["categories"] for product in All_produdcts]
     categories=[categorie  for list_categorie in categories for categorie in list_categorie]
@@ -41,14 +35,14 @@ def cos(All_produdcts=None,favorite_products=None):
                 result_matrix[int(userId), int(genreNum)] += float(dfInfo['rating'])* float(dfInfo[int(genreNum)+12])
         result_matrix[int(userId)] = result_matrix[int(userId)]/nbRating
 
-    print(result_matrix)
-    print(genre_ratings_users_df(1,all_categories,result_matrix))
+    # print(result_matrix)
+    genre_ratings_users_df(id,all_categories,result_matrix)
     #question 8
-    top_movies1 = topMovieUser(1,All_produdcts,3,result,result_matrix)
-    print(top_movies1)
+    top_movies1 = topMovieUser(id,All_produdcts,3,result,result_matrix)
+    return top_movies1
 #question 7
 def genre_ratings_users_df(userId,all_categories,users):
-    data = {'categories': all_categories, 'Scores': users[userId]}
+    data = {'categories': all_categories, 'Scores': users[int(userId)]}
     df = pd.DataFrame(data = data)
     return df.sort_values(by='Scores', ascending=False)
 
@@ -71,7 +65,7 @@ def rootSquare(vector):
     return math.sqrt(res)
 def topMovieUser(user_id, products, n,result,users):
     # Get user information
-    user = users[user_id]
+    user = users[int(user_id)]
     # Remove seen movie (they are rated)
     products_seen = result[result['sender'] == user_id]['nameP']
     products_unseen = products[~products['nameP'].isin(products_seen)]
@@ -83,4 +77,4 @@ def topMovieUser(user_id, products, n,result,users):
     productsScores = {k: v for k, v in sorted(productsScores.items(), key=lambda item: item[1], reverse=True)}
     #Return n first
     return {k: productsScores[k] for k in list(productsScores)[:n]}
-cos()
+
