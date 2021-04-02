@@ -1,7 +1,8 @@
 const config = require("../config");
 const axios = require("axios");
 
-const apiURL = "https://fashion-api.vercel.app";
+const apiURL_db = "https://fashion-api.vercel.app";
+const apiURL_reco = "https://fashion-api-reco.herokuapp.com/user";
 
 const extractEntity = (nlp, entity) => {
   if (entity == "intent") {
@@ -21,7 +22,7 @@ const extractEntity = (nlp, entity) => {
 
 const getProductsFilter = (filter) => {
   return new Promise(async (resolve, reject) => {
-    url = apiURL + "/products/search";
+    url = apiURL_db + "/products/search";
     axios.get(url , {data : {filter: filter}}).then(res => {
       if(res.data.status != 200){
         resolve({'status': res.data.status, 'products': []})
@@ -123,7 +124,7 @@ const products = async function(nlpData) {
 
 const saveRatings = async function(dataUser){
   return new Promise(async (resolve, reject) =>{
-    url = apiURL + "/user/products";
+    url = apiURL_db + "/user/products";
     axios.put(url,{data : dataUser}).then(res => {
       resolve({'status': res.data.status});
     }).catch(err => {
@@ -133,5 +134,19 @@ const saveRatings = async function(dataUser){
   })
 }
 
+const recommend = async function(sender){
+  return new Promise(async (resolve, reject) => {
+    axios.get(apiURL_reco, {params: {id: sender}}).then(res =>{
+      resolve(res.data);
+    }).catch(err => {
+      console.log(err);
+      resolve({'status': 500});
+    })
+  })
+}
+
 module.exports.products = products;
 module.exports.saveRatings = saveRatings;
+module.exports.recommend = recommend;
+
+module.exports.getProductsFilter = getProductsFilter;
