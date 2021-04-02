@@ -5,7 +5,7 @@ import math
 
 #TODO : modify id from favorite_products
 
-def cos(All_produdcts, favorite_products, id):
+def cos(All_produdcts, favorite_products):
     favorite_products = pd.DataFrame(favorite_products)
 
     # Getting categories
@@ -27,32 +27,24 @@ def cos(All_produdcts, favorite_products, id):
     favorite_products = favorite_products.rename(columns={"product": "nameP"})
     result = pd.merge(favorite_products, All_produdcts, on='nameP')
 
-    max_user = max(result['sender'])
-    # We create a matrix of 0 with rows = number of users and columns = number of categories
-    # int(len(uid)) insteand of int(max_user)
-    result_matrix = np.zeros(shape=(int(max_user)+1, len(all_categories)))
-    all_ids = np.unique(result['sender'])
+    # We create a matrix of 0 with rows = number of users (1) and columns = number of categories
+    result_matrix = np.zeros(shape=(1, len(all_categories)))
 
-    # for x in range()
-    for userId in all_ids:
-        dfId = result[result['sender'] == userId]
-        nbRating = len(dfId.index)
-        for index in dfId.index:
-            dfInfo = dfId.loc[index]
-            for genreNum in range(len(all_categories)):
-                result_matrix[int(userId), int(genreNum)] += float(dfInfo['rating']) * float(dfInfo[int(genreNum)+12])
-        result_matrix[int(userId)] = result_matrix[int(userId)]/nbRating
+    nbRating = len(result.index)
+    for index in result.index:
+        dfInfo = result.loc[index]
+        for genreNum in range(len(all_categories)):
+            result_matrix[0, int(genreNum)] += float(dfInfo['rating']) * float(dfInfo[int(genreNum)+12])
+    result_matrix[0] = result_matrix[0]/nbRating
 
+    genre_ratings_users_df(all_categories, result_matrix)
 
-    genre_ratings_users_df(id, all_categories, result_matrix)
-
-    top_movies1 = topMovieUser(id, All_produdcts, 3, result, result_matrix)
+    top_movies1 = topMovieUser(All_produdcts, 3, result, result_matrix)
     return top_movies1
 
 
-
-def genre_ratings_users_df(userId, all_categories, users):
-    data = {'categories': all_categories, 'Scores': users[int(userId)]}
+def genre_ratings_users_df(all_categories, users):
+    data = {'categories': all_categories, 'Scores': users[0]}
     df = pd.DataFrame(data=data)
     return df.sort_values(by='Scores', ascending=False)
 
@@ -77,14 +69,16 @@ def rootSquare(vector):
     return math.sqrt(res)
 
 
-def topMovieUser(user_id, products, n, result, users):
+def topMovieUser(products, n, result, users):
     # Get user information
-    user = users[int(user_id)]
-    # Remove seen movie (they are rated)
-    products_seen = result[result['sender'] == user_id]['nameP']
-    products_unseen = products[~products['nameP'].isin(products_seen)]
+    user = users[0]
+
+    # Remove seen products (they are rated)
+    products_rated = result['nameP']
+    products_unrated = products[~products['nameP'].isin(products_rated)]
+
     # We store movies id paired with their score
-    productsId = list(products_unseen['nameP'])
+    productsId = list(products_unrated['nameP'])
     scores = products.apply(lambda x: cosine(user, x[10:]), axis=1)
     productsScores = dict(zip(productsId, scores))
     # Sort dictionnary

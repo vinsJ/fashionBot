@@ -7,7 +7,11 @@ user = os.getenv('USER')
 password = os.getenv('PASSWORD')
 cluster_url = os.getenv('CLUSTER_URL')
 
-def connection(db=None, colection="users"):
+url = 'mongodb+srv://' + user + ':' + password + '@' + cluster_url + '?retryWrites=true&w=majority'
+client = MongoClient(url)
+DB = client.fashionBot
+
+def connection(db=DB, collection="users"):
     if(db):
         print("Already connected ! 🔌⚡")
         return db
@@ -17,7 +21,7 @@ def connection(db=None, colection="users"):
             '@' + cluster_url + '?retryWrites=true&w=majority'
         client = MongoClient(url)
         db = client.fashionBot
-        if(colection == "users"):
+        if(collection == "users"):
             return db.users
         else:
             return db.products
@@ -26,14 +30,15 @@ def connection(db=None, colection="users"):
         print("🚨", e)
 
 
-def query(id, colection):
-    db = connection(None, colection)
+def query(id, collection):
+    db = connection(DB, collection)
     try:
-        print("try to find the id 🍳")
         if(id):
-            res = db.find({"sender": id})
+            print("Finding favorite products of user 🍳")
+            res = db.users.find({"sender": id})
         else:
-            res = db.find({})
+            print("Retrieving all prodcuts from db 💾")
+            res = db.products.find({})
         res_prod = []
         for x in res:
             if(id):
@@ -43,14 +48,5 @@ def query(id, colection):
                 res_prod.append({"nameP": x["nameP"], "price": x["price"], "images": x["images"], "categories": x["categories"], "brandName": x["brandName"],
                                 "link": x["link"], "uuid": x["uuid"], "color": x["color"], "material": x["material"], "onSale": x["onSale"], "new": x["new"]})
         return res_prod
-    except Exception as e:
-        print("🚨", e)
-
-
-def get_unique_id():
-    try:
-        collection = connection(None, "users")
-        res = collection.distinct('sender')
-        return res
     except Exception as e:
         print("🚨", e)
