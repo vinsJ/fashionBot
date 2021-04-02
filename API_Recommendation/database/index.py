@@ -38,7 +38,7 @@ def query(id, collection):
             res = db.users.find({"sender": id})
         else:
             print("Retrieving all prodcuts from db 💾")
-            res = db.products.find({})
+            res = db.products.find({}).limit(700)
         res_prod = []
         for x in res:
             if(id):
