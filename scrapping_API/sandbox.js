@@ -3,8 +3,8 @@ const dedicatedbrand = require('./sources/dedicatedbrand');
 
 const fs = require('fs')
 
-const db = require('./database');
-const db2 = require('./database/api-db');
+const db = require('../API/database');
+const db2 = require('../API/database/api-db');
 
 async function sandbox (brand = None) {
   try {
