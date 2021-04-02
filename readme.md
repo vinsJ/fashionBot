@@ -65,16 +65,16 @@ We used templates to present our products. The *emoji is adapted* for the genre 
 
 Keep in mind that you can combine all the query to make a super complex query. It will understands. 
 
-- >"Give me products" will return 3 randoms products
-- >"Give me **[color]** products"
-- >"Give me products costing **<more|less>** than **[price]** €"
-- >"Give me prodcuts **(not) on** sale"
-- >"Give me products in **organical cotton**"
-- >"Give me products for **<men|women|kids>**"
+- >Give me products" will return 3 randoms products
+- >Give me **[color]** products
+- >Give me products costing **<more|less>** than **[price]** €
+- >Give me prodcuts **(not) on** sale
+- >Give me products in **organical cotton**
+- >Give me products for **<men|women|kids>**
 
-You can have fun and ask :
+Wanna spice things up ? 🔥 Ask for this:
 
-Give me red products for men, costing less than 80€ on sale in organical cotton for men 
+>Give me red products for men, costing less than 80€, on sale, in organic and fairtrade cotton for men
 
 ---
 
