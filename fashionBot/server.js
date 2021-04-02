@@ -32,17 +32,17 @@ server.post("/", (req, res, next) => {
       console.log("💽 NLP intents: ", data.nlp.intents);
       console.log("💽 NLP entities: ", data.nlp.entities);
 
-      if(data.content.toLowerCase().includes('i like')){
+      if (data.content.toLowerCase().includes('i like')) {
         productLikes = gradeHelper.retrieveLikes(data.content.toLowerCase());
         console.log(productLikes);
-        if(productLikes.product != null && productLikes.product != ' ' && productLikes.rating != null) {
+        if (productLikes.product != null && productLikes.product != ' ' && productLikes.rating != null) {
           productLikes['sender'] = data.sender;
           fashion.saveRatings(productLikes).then(res => {
-            if(res.status == 200){
+            if (res.status == 200) {
               f.txt(data.sender, 'Yaay, we saved this information ! 🎉🎉');
-            } else if(res.status == 404){
+            } else if (res.status == 404) {
               f.txt(data.sender, "Mmhh 🤔 The product doesn't exists. You should check the spelling !");
-            } else if(res.status == 500){
+            } else if (res.status == 500) {
               f.txt(data.sender, "Oups, something went wrong with our Database 🤦‍♂️🔨\n\nPlease try again later");
             }
           })
@@ -51,7 +51,7 @@ server.post("/", (req, res, next) => {
         }
       }
 
-      if(data.content.toLowerCase().includes('recommend me')){
+      if (data.content.toLowerCase().includes('recommend me')) {
         // call to api
       }
 
@@ -64,7 +64,7 @@ server.post("/", (req, res, next) => {
           }
         }
       }
-      
+
       fashion.products(data.nlp).then(res => {
         if (res.type == "FetchProducts") {
           if (res.status == 200 || res.status == 204) {
@@ -87,7 +87,9 @@ server.post("/", (req, res, next) => {
             f.txt(data.sender, "Oups, something went wrong with our Database 🤦‍♂️🔨\n\nPlease try again later");
           }
 
-        } else if(res.type == "unknown" && data.nlp.traits.hasOwnProperty('wit$greetings') == false){
+        } else if (res.type == "unknown" && data.nlp.traits.hasOwnProperty('wit$greetings') == false && 
+          data.content.toLowerCase().includes('i like') == false && 
+          data.content.toLowerCase().includes('recommend me') == false) {
           f.txt(data.sender, "I'm sorry, I don't understand what you are saying 🥺");
         }
 
