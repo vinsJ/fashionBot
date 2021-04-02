@@ -87,7 +87,7 @@ server.post("/", (req, res, next) => {
             f.txt(data.sender, "Oups, something went wrong with our Database 🤦‍♂️🔨\n\nPlease try again later");
           }
 
-        } else if(res.type == "unknown"){
+        } else if(res.type == "unknown" && data.nlp.traits.hasOwnProperty('wit$greetings') == false){
           f.txt(data.sender, "I'm sorry, I don't understand what you are saying 🥺");
         }
 
