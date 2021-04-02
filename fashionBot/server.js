@@ -68,9 +68,9 @@ server.post("/", (req, res, next) => {
       fashion.products(data.nlp).then(res => {
         if (res.type == "FetchProducts") {
           if (res.status == 200 || res.status == 204) {
-            f.txt(data.sender, `This is ${res.products.length} randoms products 🕵️‍♀️`);
             let response = responseHandle.processResponse(res.products);
             if (response.prods.length > 0) {
+              f.txt(data.sender, `This is ${res.products.length} randoms products 🕵️‍♀️`);
               response.prods.forEach(p => {
                 let sale = "";
                 if (p.material == "undefined") p.material = "";
