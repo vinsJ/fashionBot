@@ -45,7 +45,7 @@ fashionBot is really nice and friendly :
  - It tells you if he doesn't understands with cute sad eyes so you won't be mad at him 🥺
  - It tells you what's going on with the things you asked ! (Number of products founds, if the products you like has been stored...) ❌❔✅
 
-![alt text](./img/Hello.jpg "Logo Title Text 1")
+![alt text](./img/Hello.jpg "Hello")
 
 ## He understands pretty well 💡🔍
 
@@ -78,5 +78,5 @@ Wanna spice things up ? 🔥 Ask for this:
 
 ---
 
-**By Vincent DEBANDE and Ludovic CHEVALLIER 
+**Made with ❤ By Vincent DEBANDE and Ludovic CHEVALLIER 
 ESILV - M1 Data Science and Artificial Intelligence**
