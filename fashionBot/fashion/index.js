@@ -1,7 +1,7 @@
 const config = require("../config");
 const axios = require("axios");
 
-const apiURL = "http://localhost:3300";
+const apiURL = "https://fashion-api.vercel.app";
 
 const extractEntity = (nlp, entity) => {
   if (entity == "intent") {
