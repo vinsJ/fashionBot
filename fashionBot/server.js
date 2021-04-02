@@ -33,26 +33,61 @@ server.post("/", (req, res, next) => {
       console.log("💽 NLP entities: ", data.nlp.entities);
 
       if (data.content.toLowerCase().includes('i like')) {
-        productLikes = gradeHelper.retrieveLikes(data.content.toLowerCase());
-        console.log(productLikes);
-        if (productLikes.product != null && productLikes.product != ' ' && productLikes.rating != null) {
-          productLikes['sender'] = data.sender;
-          fashion.saveRatings(productLikes).then(res => {
-            if (res.status == 200) {
-              f.txt(data.sender, 'Yaay, we saved this information ! 🎉🎉');
-            } else if (res.status == 404) {
-              f.txt(data.sender, "Mmhh 🤔 The product doesn't exists. You should check the spelling !");
-            } else if (res.status == 500) {
-              f.txt(data.sender, "Oups, something went wrong with our Database 🤦‍♂️🔨\n\nPlease try again later");
-            }
-          })
+        if (data.content.toLowerCase().includes('with')) {
+          productLikes = gradeHelper.retrieveLikes(data.content.toLowerCase());
+          console.log(productLikes);
+          if (productLikes.product != null && productLikes.product != ' ' && productLikes.rating != null && productLikes.rating !== NaN) {
+            productLikes['sender'] = data.sender;
+            fashion.saveRatings(productLikes).then(res => {
+              if (res.status == 200) {
+                f.txt(data.sender, 'Yaay, we saved this information ! 🎉🎉');
+              } else if (res.status == 404) {
+                f.txt(data.sender, "Mmhh 🤔 The product doesn't exists. You should check the spelling !");
+              } else if (res.status == 500) {
+                f.txt(data.sender, "Oups, something went wrong with our Database 🤦‍♂️🔨\n\nPlease try again later");
+              }
+            })
+          } else {
+            f.txt(data.sender, "I'm sorry, I don't recognize the product or the grade. 🤷‍♂️\n\nPlease, be sure to type : \"I like <product> with <rating>\". The rating must be between 0 and 5.");
+          }
         } else {
           f.txt(data.sender, "I'm sorry, I don't recognize the product or the grade. 🤷‍♂️\n\nPlease, be sure to type : \"I like <product> with <rating>\". The rating must be between 0 and 5.");
         }
       }
 
+
       if (data.content.toLowerCase().includes('recommend me')) {
-        // call to api
+        console.log("Recommendation processing... ⏳");
+        fashion.recommend(data.sender).then(res => {
+          console.log("Recommendation made ✅");
+          if (res.hasOwnProperty('status') && res.status == 200) {
+            fashion.getProductsFilter({ 'nameP': { '$in': Object.keys(res.data) } }).then(res => {
+              console.log()
+              if (res.status == 200) {
+                f.txt(data.sender, `This is ${res.products.length} products I can recommend based on the categories you ❤`);
+                if (res.products.length > 0) {
+                  res.products.forEach(p => {
+                    let sale = "";
+                    if (p.material == "undefined") p.material = "";
+                    else p.material = "| " + p.material;
+                    if (p.onSale == true) sale = "| 💸";
+                    f.template(data.sender, p.name, p.link, p.image, p.price, p.emoji, p.type, p.material, sale).catch((err) => {
+                      console.log(err);
+                    });
+                  });
+                } else {
+                  f.txt(data.sender, "I'm sorry, there is not product I can recommend to you 🥺");
+                }
+
+              }
+            });
+          } else if (res.hasOwnProperty('status') && res.status == 404) {
+            f.txt(data.sender, "Sorry but you didn't rate products yet. I can't recommend anything 🤷‍♂️🔍");
+          } else {
+            f.txt(data.sender, "Oh, sorry ! Something might be wrong with our servers. Please try again later ! 🙏");
+          }
+        });
+        f.txt(data.sender, "Sit tight, we are looking for products macthing categories you like 👕💡 This might take a while ⏳");
       }
 
       if (data.nlp.hasOwnProperty('traits')) {
@@ -87,8 +122,8 @@ server.post("/", (req, res, next) => {
             f.txt(data.sender, "Oups, something went wrong with our Database 🤦‍♂️🔨\n\nPlease try again later");
           }
 
-        } else if (res.type == "unknown" && data.nlp.traits.hasOwnProperty('wit$greetings') == false && 
-          data.content.toLowerCase().includes('i like') == false && 
+        } else if (res.type == "unknown" && data.nlp.traits.hasOwnProperty('wit$greetings') == false &&
+          data.content.toLowerCase().includes('i like') == false &&
           data.content.toLowerCase().includes('recommend me') == false) {
           f.txt(data.sender, "I'm sorry, I don't understand what you are saying 🥺");
         }
