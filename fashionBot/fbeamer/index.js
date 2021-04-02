@@ -98,7 +98,7 @@ class FBeamer {
                 json: payload
             }, (error, response, body) => {
                 if (!error && response.statusCode === 200) {
-                    this.sleep(200).then(res => {
+                    this.sleep(300).then(res => {
                         resolve({
                             mid: body.message_id,
                             aid: body.attachment_id
