@@ -1,12 +1,12 @@
 {
-  "name": "moviebot",
+  "name": "fashionBot",
   "version": "1.0.0",
-  "description": "Movie bot - Facebook messenger chatbot",
+  "description": "fashion bot - Facebook messenger chatbot",
   "main": "server.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "author": "Vincent DEBANDE - DIA2",
+  "author": "Vincent DEBANDE & Ludovic CHEVALLIER- DIA2",
   "license": "ISC",
   "dependencies": {
     "axios": "^0.21.1",
