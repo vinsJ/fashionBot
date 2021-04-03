@@ -1,4 +1,9 @@
 const getGrade = function (content) {
+    /**
+     * Get the grade out of the sentence "I like <product> with <grade>"
+     * @param {string} content Content of the message
+     * @param {float} rating of the product
+     */
     try {
         const grade = " with ";
 
@@ -26,6 +31,11 @@ const getGrade = function (content) {
 
 
 const getProduct = function (content) {
+    /**
+    * Get the products out of the sentence "I like <product> with <grade>"
+    * @param {string} content Content of the message
+    * @return {string} product name
+    */
     try {
         const like = "i like ";
         const grade = " with ";
@@ -40,6 +50,11 @@ const getProduct = function (content) {
 
 
 const retrieveLikes = function (content) {
+    /**
+    * Get the products out of the sentence "I like <product> with <grade>"
+    * @param {string} content Content of the message
+    * @return {Object} product name and rating
+    */
     product = getProduct(content);
     rating = getGrade(content);
 

@@ -1,4 +1,11 @@
 const processResponse = function(products){
+    /**
+     * Process the products to create objects designed for Facebook Messenger Templates
+     * 
+     * @param {[Products]} products array of products
+     * @return {[Object]} normalized objects for sending templates to Messenger with emojis
+     * 
+     */
     if(products){
         let message = "";
         let images = [];
@@ -24,6 +31,11 @@ const processResponse = function(products){
 }
 
 const getEmoji = function(genre, type){
+    /**
+     * Get emoji based on the genre of the product
+     * @param {string} genre of the product
+     * @return {string} emoji
+     */
     let emoji = "";
     if(genre == 'men') emoji = "🧑";
     else if (genre == 'women') emoji = "👩";

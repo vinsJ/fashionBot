@@ -5,6 +5,12 @@ const apiURL_db = "https://fashion-api.vercel.app";
 const apiURL_reco = "https://fashion-api-reco.herokuapp.com/user";
 
 const extractEntity = (nlp, entity) => {
+  /**
+   * Extract entity from object 
+   * 
+   * @param {Object} nlp object from Facebook Messenger API
+   * @param {string} entity : intent or name of the entity to retrieve
+   */
   if (entity == "intent") {
     try {
       return nlp.intents[0].confidence > 0.8 ? nlp.intents[0].name : null;
@@ -21,6 +27,11 @@ const extractEntity = (nlp, entity) => {
 };
 
 const getProductsFilter = (filter) => {
+  /**
+   * Make an HTTP call to the API to get filtered array of product
+   * @param {Object} filter to be apply on the products
+   * @return {Object} with status and array of products if any 
+   */
   return new Promise(async (resolve, reject) => {
     url = apiURL_db + "/products/search";
     axios.get(url , {data : {filter: filter}}).then(res => {
@@ -49,6 +60,11 @@ const getProductsFilter = (filter) => {
 }
 
 const products = async function(nlpData) {
+  /**
+   * Main function to create filter based on the entities. Recognize the intent
+   * @param {Object} nlpData object with the nlp data from Facebook Messenger API
+   * @return {Object} with type of response (FetchProducts or unknown), status and array of products if any
+   */
   return new Promise(async (resolve, reject) => {
     let intent = extractEntity(nlpData, "intent");
     let entities = nlpData.entities;
@@ -123,6 +139,11 @@ const products = async function(nlpData) {
 }
 
 const saveRatings = async function(dataUser){
+  /**
+   * Save rating of a product for a given user in the DB with HTTP call to API
+   * @param {Object} dataUser containing, userID, product name, rating
+   * @return {Object} status
+   */
   return new Promise(async (resolve, reject) =>{
     url = apiURL_db + "/user/products";
     axios.put(url,{data : dataUser}).then(res => {
@@ -135,6 +156,11 @@ const saveRatings = async function(dataUser){
 }
 
 const recommend = async function(sender){
+  /**
+   * HTPP call to recommendation API /!\ Take 10 to 20 seconds
+   * @param {string} sender id
+   * @return {Object} object with status and 3 recommended products
+   */
   return new Promise(async (resolve, reject) => {
     axios.get(apiURL_reco, {params: {id: sender}}).then(res =>{
       resolve(res.data);
